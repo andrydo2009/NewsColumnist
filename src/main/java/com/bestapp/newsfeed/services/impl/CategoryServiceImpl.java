@@ -1,13 +1,16 @@
 package com.bestapp.newsfeed.services.impl;
 
 import com.bestapp.newsfeed.models.Category;
+import com.bestapp.newsfeed.models.News;
 import com.bestapp.newsfeed.repositories.CategoryRepository;
 import com.bestapp.newsfeed.services.CategoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -73,5 +76,11 @@ public class CategoryServiceImpl implements CategoryService {
         logger.info("Delete category by id = {} method was invoked", categoryId);
         categoryRepository.deleteById(categoryId);
         logger.info("Category with id = {} was deleted successfully", categoryId);
+    }
+
+    @Override
+    public List<Category> getListOfCategoryByPage(Integer number, Integer size) {
+        PageRequest pageRequest = PageRequest.of ( --number , size );
+        return categoryRepository.findAll ( pageRequest ).getContent ();
     }
 }

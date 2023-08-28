@@ -16,6 +16,7 @@ public class News {
     private String title;
     private String content;
     private LocalDate publicationDate;
+    private Long popularityRating;
     @ManyToOne
     private Category category;
 
@@ -27,6 +28,7 @@ public class News {
         this.title = title;
         this.content = content;
         this.publicationDate = publicationDate;
+        this.popularityRating = 0L;
         this.category = category;
     }
 
@@ -34,6 +36,7 @@ public class News {
         this.id = id;
         this.title = title;
         this.content = content;
+        this.popularityRating = 0L;
         this.publicationDate = publicationDate;
     }
 }

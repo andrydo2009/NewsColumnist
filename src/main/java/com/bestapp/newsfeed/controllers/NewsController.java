@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Controller for News objects class
@@ -150,5 +151,30 @@ private final NewsService newsService;
     public ResponseEntity<Void> deleteNewsById(@PathVariable("newsId") Long newsId) {
         newsService.deleteNewsById(newsId);
         return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/newsPage")
+    @Operation(
+            summary = "",
+            description = ""
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = ""
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = ""
+            )
+    })
+    public ResponseEntity<List<News>> getListNewsPage(
+            @RequestParam("page") Integer page, @RequestParam("size") Integer size) {
+        List<News> news = newsService.getListOfNewsByPage ( page,size );
+        if (news == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(news);
     }
 }

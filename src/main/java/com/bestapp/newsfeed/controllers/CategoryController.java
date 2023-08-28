@@ -1,6 +1,7 @@
 package com.bestapp.newsfeed.controllers;
 
 import com.bestapp.newsfeed.models.Category;
+import com.bestapp.newsfeed.models.News;
 import com.bestapp.newsfeed.services.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Controller for Category objects class
@@ -150,5 +152,29 @@ public class CategoryController {
     public ResponseEntity<Void> deleteCategoryById(@PathVariable("categoryId") Long categoryId) {
         categoryService.deleteCategoryById(categoryId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/newsCategory")
+    @Operation(
+            summary = "",
+            description = ""
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = ""
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = ""
+            )
+    })
+    public ResponseEntity<List<Category>> getListCategoryPage(
+            @RequestParam("page") Integer page, @RequestParam("size") Integer size) {
+        List<Category> categories = categoryService.getListOfCategoryByPage ( page,size );
+        if (categories == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(categories);
     }
 }

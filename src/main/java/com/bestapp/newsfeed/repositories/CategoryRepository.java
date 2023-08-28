@@ -1,4 +1,7 @@
 package com.bestapp.newsfeed.repositories;
 
-public interface CategoryRepository {
+import com.bestapp.newsfeed.models.Category;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CategoryRepository extends JpaRepository<Category, Long> {
 }

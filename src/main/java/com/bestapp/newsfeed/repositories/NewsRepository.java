@@ -1,4 +1,7 @@
 package com.bestapp.newsfeed.repositories;
 
-public interface NewsRepository {
+import com.bestapp.newsfeed.models.News;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface NewsRepository extends JpaRepository<News, Long> {
 }

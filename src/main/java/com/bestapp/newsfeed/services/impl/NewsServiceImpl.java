@@ -1,11 +1,13 @@
 package com.bestapp.newsfeed.services.impl;
 
+import com.bestapp.newsfeed.dto.NewsDTO;
 import com.bestapp.newsfeed.exceptions.NewsByCategoryNotFoundException;
 import com.bestapp.newsfeed.exceptions.NewsByContentNotFoundException;
 import com.bestapp.newsfeed.exceptions.NewsByTitleNotFoundException;
 import com.bestapp.newsfeed.exceptions.NewsNotFoundException;
 import com.bestapp.newsfeed.models.Category;
 import com.bestapp.newsfeed.models.News;
+import com.bestapp.newsfeed.repositories.CategoryRepository;
 import com.bestapp.newsfeed.repositories.NewsRepository;
 import com.bestapp.newsfeed.services.NewsService;
 import org.slf4j.Logger;
@@ -13,16 +15,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Service
 public class NewsServiceImpl implements NewsService {
     private final NewsRepository newsRepository;
+    private final CategoryRepository categoryRepository;
     private static final Logger logger = LoggerFactory.getLogger(NewsServiceImpl.class);
 
-    public NewsServiceImpl(NewsRepository newsRepository) {
+    public NewsServiceImpl(NewsRepository newsRepository, CategoryRepository categoryRepository) {
         this.newsRepository = newsRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     /**
@@ -34,9 +39,9 @@ public class NewsServiceImpl implements NewsService {
      * @return created News class object
      */
     @Override
-    public News createNews(News news) {
+    public NewsDTO createNews(NewsDTO news) {
         logger.info("Create news method was invoked");
-        newsRepository.save(news);
+        newsRepository.save(toNews(news));
         logger.info("News {} was created successfully", news);
         return news;
     }
@@ -49,11 +54,11 @@ public class NewsServiceImpl implements NewsService {
      * @return collection of News class objects
      */
     @Override
-    public Collection<News> findAllNews() {
+    public Collection<NewsDTO> findAllNews() {
         logger.info("Find all news method was invoked");
         Collection<News> news = newsRepository.findAll();
         logger.info("All news was successfully found");
-        return news;
+        return getListNewsDTO(news);
     }
 
     /**
@@ -65,9 +70,9 @@ public class NewsServiceImpl implements NewsService {
      * @return updated News class object
      */
     @Override
-    public News updateNews(News news) {
+    public NewsDTO updateNews(NewsDTO news) {
         logger.info("Update news: {} method was invoked", news);
-        newsRepository.save(news);
+        newsRepository.save(toNews(news));
         logger.info("News {} was updated successfully", news);
         return news;
     }
@@ -140,5 +145,33 @@ public class NewsServiceImpl implements NewsService {
             throw new NewsNotFoundException("No news found for - " + category.getName() + " " + title + " " + content);
         }
         return news;
+    }
+    private NewsDTO fromNews(News news) {
+        NewsDTO newsDTO=new NewsDTO();
+        newsDTO.setIdDTO ( news.getId () );
+        newsDTO.setTitleDTO(news.getTitle());
+        newsDTO.setContent(news.getContent());
+        newsDTO.setPublicationDateDTO(news.getPublicationDate());
+        newsDTO.setPopularityRatingDTO(news.getPopularityRating());
+        newsDTO.setCategoryIdDTO(news.getCategory().getId());
+        newsDTO.setCategoryDTO(CategoryServiceImpl.fromCategory(news.getCategory()));
+        return newsDTO;
+    }
+
+    private News toNews(NewsDTO newsDTO) {
+        return new News(
+                newsDTO.getIdDTO () ,
+                newsDTO.getTitleDTO() ,
+                newsDTO.getContent(),
+                newsDTO.getPublicationDateDTO(),
+                newsDTO.getPopularityRatingDTO(),
+                categoryRepository.getReferenceById(newsDTO.getCategoryIdDTO())
+        );
+    }
+
+    private Collection<NewsDTO> getListNewsDTO(Collection<News> list){
+        Collection<NewsDTO> newsDTOArrayList = new ArrayList<>();
+        list.forEach ( news -> newsDTOArrayList.add ( fromNews ( news ) ) );
+        return newsDTOArrayList;
     }
 }

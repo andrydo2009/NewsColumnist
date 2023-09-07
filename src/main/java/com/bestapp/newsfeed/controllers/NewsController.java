@@ -1,5 +1,6 @@
 package com.bestapp.newsfeed.controllers;
 
+import com.bestapp.newsfeed.dto.NewsDTO;
 import com.bestapp.newsfeed.models.News;
 import com.bestapp.newsfeed.services.NewsService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,8 +52,8 @@ private final NewsService newsService;
                     }
             )
     })
-    public ResponseEntity<News> createNews(@RequestBody News news) {
-        News createdNews = newsService.createNews(news);
+    public ResponseEntity<NewsDTO> createNews(@RequestBody NewsDTO news) {
+        NewsDTO createdNews = newsService.createNews(news);
         return ResponseEntity.ok(createdNews);
     }
 
@@ -85,8 +86,8 @@ private final NewsService newsService;
                     }
             )
     })
-    public ResponseEntity<Collection<News>> getAllNews() {
-        Collection<News> news = newsService.findAllNews();
+    public ResponseEntity<Collection<NewsDTO>> getAllNews() {
+        Collection<NewsDTO> news = newsService.findAllNews();
         if (news == null) {
             return ResponseEntity.notFound().build();
         }
@@ -122,8 +123,8 @@ private final NewsService newsService;
                     }
             )
     })
-    public ResponseEntity<News> updateNews(@RequestBody News news) {
-        News updatedNews = newsService.updateNews(news);
+    public ResponseEntity<NewsDTO> updateNews(@RequestBody NewsDTO news) {
+        NewsDTO updatedNews = newsService.updateNews(news);
         if (updatedNews == null) {
             return ResponseEntity.notFound().build();
         }
@@ -156,17 +157,17 @@ private final NewsService newsService;
 
     @GetMapping("/newsPage")
     @Operation(
-            summary = "",
-            description = ""
+            summary = " ",
+            description = " "
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = ""
+                    description = " "
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = ""
+                    description = " "
             )
     })
     public ResponseEntity<List<News>> getListNewsPage(

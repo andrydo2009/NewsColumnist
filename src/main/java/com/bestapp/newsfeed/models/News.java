@@ -1,14 +1,14 @@
 package com.bestapp.newsfeed.models;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Getter
-@Setter
 public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,24 +19,4 @@ public class News {
     private Long popularityRating;
     @ManyToOne
     private Category category;
-
-    public News() {
-    }
-
-    public News(Long id, String title, String content, LocalDate publicationDate, Category category) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.publicationDate = publicationDate;
-        this.popularityRating = 0L;
-        this.category = category;
-    }
-
-    public News(Long id, String title, String content, LocalDate publicationDate) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.popularityRating = 0L;
-        this.publicationDate = publicationDate;
-    }
 }

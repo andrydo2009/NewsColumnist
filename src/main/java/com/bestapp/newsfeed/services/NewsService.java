@@ -1,5 +1,6 @@
 package com.bestapp.newsfeed.services;
 
+import com.bestapp.newsfeed.dto.NewsDTO;
 import com.bestapp.newsfeed.models.Category;
 import com.bestapp.newsfeed.models.News;
 
@@ -7,9 +8,9 @@ import java.util.Collection;
 import java.util.List;
 
 public interface NewsService {
-    News createNews(News news);
-    Collection<News> findAllNews();
-    News updateNews(News news);
+    NewsDTO createNews(NewsDTO news);
+    Collection<NewsDTO> findAllNews();
+    NewsDTO updateNews(NewsDTO news);
     void deleteNewsById(Long newsId);
     List<News> getListOfNewsByPage(Integer number, Integer size);
     List<News> findNewsByTitle(String title);

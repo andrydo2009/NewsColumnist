@@ -1,16 +1,16 @@
 package com.bestapp.newsfeed.services;
 
+import com.bestapp.newsfeed.dto.CategoryDTO;
 import com.bestapp.newsfeed.models.Category;
-import com.bestapp.newsfeed.models.News;
 
 import java.util.Collection;
 import java.util.List;
 
 public interface CategoryService {
-    Category createCategory(Category category);
-    Collection<Category> findAllCategories();
+    CategoryDTO createCategory(CategoryDTO category);
+    Collection<CategoryDTO> findAllCategories();
 
-    Category updateCategory(Category category);
+    CategoryDTO updateCategory(CategoryDTO category);
 
     void deleteCategoryById(Long categoryId);
     List<Category> getListOfCategoryByPage(Integer number, Integer size);}

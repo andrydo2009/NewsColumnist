@@ -1,7 +1,7 @@
 package com.bestapp.newsfeed.controllers;
 
+import com.bestapp.newsfeed.dto.CategoryDTO;
 import com.bestapp.newsfeed.models.Category;
-import com.bestapp.newsfeed.models.News;
 import com.bestapp.newsfeed.services.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -52,8 +52,8 @@ public class CategoryController {
                     }
             )
     })
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        Category createdCategory = categoryService.createCategory(category);
+    public ResponseEntity<CategoryDTO> createCategory(@RequestBody CategoryDTO category) {
+        CategoryDTO createdCategory = categoryService.createCategory(category);
         return ResponseEntity.ok(createdCategory);
     }
 
@@ -86,8 +86,8 @@ public class CategoryController {
                     }
             )
     })
-    public ResponseEntity<Collection<Category>> getAllCategories() {
-        Collection<Category> categories = categoryService.findAllCategories();
+    public ResponseEntity<Collection<CategoryDTO>> getAllCategories() {
+        Collection<CategoryDTO> categories = categoryService.findAllCategories();
         if (categories == null) {
             return ResponseEntity.notFound().build();
         }
@@ -123,8 +123,8 @@ public class CategoryController {
                     }
             )
     })
-    public ResponseEntity<Category> updateCategory(@RequestBody Category category) {
-        Category updatedCategory = categoryService.updateCategory(category);
+    public ResponseEntity<CategoryDTO> updateCategory(@RequestBody CategoryDTO category) {
+        CategoryDTO updatedCategory = categoryService.updateCategory(category);
         if (updatedCategory == null) {
             return ResponseEntity.notFound().build();
         }
@@ -156,17 +156,17 @@ public class CategoryController {
 
     @GetMapping("/newsCategory")
     @Operation(
-            summary = "",
-            description = ""
+            summary = " ",
+            description = " "
     )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = ""
+                    description = " "
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = ""
+                    description = " "
             )
     })
     public ResponseEntity<List<Category>> getListCategoryPage(

@@ -1,7 +1,7 @@
 package com.bestapp.newsfeed.services.impl;
 
+import com.bestapp.newsfeed.dto.CategoryDTO;
 import com.bestapp.newsfeed.models.Category;
-import com.bestapp.newsfeed.models.News;
 import com.bestapp.newsfeed.repositories.CategoryRepository;
 import com.bestapp.newsfeed.services.CategoryService;
 import org.slf4j.Logger;
@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,9 +30,9 @@ public class CategoryServiceImpl implements CategoryService {
      * @return created Category class object
      */
     @Override
-    public Category createCategory(Category category) {
+    public CategoryDTO createCategory(CategoryDTO category) {
         logger.info("Create category method was invoked");
-        categoryRepository.save(category);
+        categoryRepository.save(toCategory(category));
         logger.info("Category {} was created successfully", category);
         return category;
     }
@@ -43,11 +44,11 @@ public class CategoryServiceImpl implements CategoryService {
      * @return collection of Category class objects
      */
     @Override
-    public Collection<Category> findAllCategories() {
+    public Collection<CategoryDTO> findAllCategories() {
         logger.info("Find all categories method was invoked");
         Collection<Category> categories = categoryRepository.findAll();
         logger.info("All categories was successfully found");
-        return categories;
+        return getListCategoryDTO(categories);
     }
 
     /**
@@ -58,9 +59,9 @@ public class CategoryServiceImpl implements CategoryService {
      * @return updated Category class object
      */
     @Override
-    public Category updateCategory(Category category) {
+    public CategoryDTO updateCategory(CategoryDTO category) {
         logger.info("Update category: {} method was invoked", category);
-        categoryRepository.save(category);
+        categoryRepository.save(toCategory(category));
         logger.info("Category {} was updated successfully", category);
         return category;
     }
@@ -82,5 +83,24 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> getListOfCategoryByPage(Integer number, Integer size) {
         PageRequest pageRequest = PageRequest.of ( --number , size );
         return categoryRepository.findAll ( pageRequest ).getContent ();
+    }
+
+    public static CategoryDTO fromCategory(Category category) {
+        CategoryDTO categoryDTO=new CategoryDTO();
+        categoryDTO.setIdDTO(category.getId());
+        categoryDTO.setNameDTO(category.getName());
+        return categoryDTO;
+    }
+    public static Category toCategory(CategoryDTO categoryDTO) {
+        return new Category (
+                categoryDTO.getIdDTO(),
+                categoryDTO.getNameDTO()
+        );
+    }
+
+    private Collection<CategoryDTO> getListCategoryDTO(Collection<Category> list) {
+        Collection<CategoryDTO> categories=new ArrayList<>();
+        list.forEach ( category -> categories.add ( fromCategory( category ) ) );
+        return categories;
     }
 }

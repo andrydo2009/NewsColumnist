@@ -98,17 +98,18 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<News> findNewsByTitle(String title) {
-        List<News> news = newsRepository.findNewsByTitle(title);
+    public Collection<NewsDTO> findNewsByTitle(String title) {
+        Collection<News> news = newsRepository.findNewsByTitle(title);
+        Collection<NewsDTO> newsDTO = getListNewsDTO(news);
         if (news.isEmpty()) {
             throw new NewsByTitleNotFoundException("No news found for title: " + title);
         }
-        return news;
+        return newsDTO;
     }
 
     @Override
-    public List<News> findNewsByCategory(Category category) {
-        List<News> news = newsRepository.findNewsByCategory(category);
+    public Collection<News>  findNewsByCategory(Category category) {
+        Collection<News> news = newsRepository.findNewsByCategory(category);
         if (news.isEmpty()) {
             throw new NewsByCategoryNotFoundException("No news found for category: " + category.getName());
         }
@@ -116,8 +117,8 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<News> findNewsByContent(String content) {
-        List<News> news = newsRepository.findNewsByContent(content);
+    public Collection<News> findNewsByContent(String content) {
+        Collection<News> news = newsRepository.findNewsByContent(content);
         if (news.isEmpty()) {
             throw new NewsByContentNotFoundException("No news found for content: " + content);
         }
@@ -139,16 +140,17 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<News> findNewsByCategoryAndTitleAndContent(Category category, String title, String content) {
-        List<News> news = newsRepository.findNewsByCategoryAndTitleAndContent(category, title, content);
+    public Collection<News>  findNewsByCategoryAndTitleAndContent(Category category, String title, String content) {
+        Collection<News> news = newsRepository.findNewsByCategoryAndTitleAndContent(category, title, content);
         if (news.isEmpty()) {
             throw new NewsNotFoundException("No news found for - " + category.getName() + " " + title + " " + content);
         }
         return news;
     }
+
     private NewsDTO fromNews(News news) {
-        NewsDTO newsDTO=new NewsDTO();
-        newsDTO.setIdDTO ( news.getId () );
+        NewsDTO newsDTO = new NewsDTO();
+        newsDTO.setIdDTO(news.getId());
         newsDTO.setTitleDTO(news.getTitle());
         newsDTO.setContent(news.getContent());
         newsDTO.setPublicationDateDTO(news.getPublicationDate());
@@ -160,8 +162,8 @@ public class NewsServiceImpl implements NewsService {
 
     private News toNews(NewsDTO newsDTO) {
         return new News(
-                newsDTO.getIdDTO () ,
-                newsDTO.getTitleDTO() ,
+                newsDTO.getIdDTO(),
+                newsDTO.getTitleDTO(),
                 newsDTO.getContent(),
                 newsDTO.getPublicationDateDTO(),
                 newsDTO.getPopularityRatingDTO(),
@@ -169,9 +171,9 @@ public class NewsServiceImpl implements NewsService {
         );
     }
 
-    private Collection<NewsDTO> getListNewsDTO(Collection<News> list){
+    private Collection<NewsDTO> getListNewsDTO(Collection<News> list) {
         Collection<NewsDTO> newsDTOArrayList = new ArrayList<>();
-        list.forEach ( news -> newsDTOArrayList.add ( fromNews ( news ) ) );
+        list.forEach(news -> newsDTOArrayList.add(fromNews(news)));
         return newsDTOArrayList;
     }
 }

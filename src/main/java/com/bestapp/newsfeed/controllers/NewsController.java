@@ -178,4 +178,27 @@ private final NewsService newsService;
         }
         return ResponseEntity.ok(news);
     }
+
+    @GetMapping("/searchTitle/{newsTitle}")
+    @Operation(
+            summary = " ",
+            description = " "
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = " "
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = " "
+            )
+    })
+    public ResponseEntity<Collection<NewsDTO>> getNewsSearchTitle(@PathVariable("newsTitle") String newsTitle) {
+        Collection<NewsDTO> news = newsService.findNewsByTitle(newsTitle);
+        if (news == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(news);
+    }
 }
